@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link href="/style/dialogue.css" type="text/css" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="
+    margin-left: 800px;
+    margin-top: 200px;
+">
+<div class="total" id="main" >
+
+    <div id="top" >
+        <div id="nameWrapper">
+            <p id="otherName"  style="color: white"></p>
+        </div>
+
+    </div>
+    <div id="chatBody" style="
+    /* width: 300px; */
+    height: 349px;
+    /* margin-left: -1px; */
+    ">
+        <div id="Information">
+
+        </div>
+
+
+        <div id="container">
+
+            <div id="show" style="text-align: right; color: white">
+                <!--<div class="loginWrapper">-->
+                    <!--<div id="login">-->
+                        <!--<div id="user"></div>-->
+                        <!--<input type="text"  id="name" />-->
+                        <!--<input type="button" value="OK" id="loginBtn" />-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+    </div>
+
+    <div id="chat" style="
+             /* margin-top: 550px; */
+             /* padding: 10px; */
+             border: 1px solid rgba(2,0,13,0.11);
+             margin-left: -1px;
+            ">
+        <div  contenteditable="true" id = "input"></div>
+
+
+        <br>
+        <button id="btn" >发送</button>
+
+        <br>
+    </div>
+</div>
+
+
+
+
+
+
+
+</body>
+<script src="/socket.io/socket.io.js">
+</script>
+<script>
+    var name;
+    var index;
+    var usersArray = new Array();
+
+    var socket = io.connect('http://localhost');
+    var msg;
+    var myDate = new Date();
+    //var myTime=myDate.toLocaleTimeString();
+    var value;
+    var ls;
+    var data;
+var index;
+    this.create();
+console.log("room");
+
+    function create() {
+//        document.getElementById('user').style.display='block';
+//        $("#user")[0].innerHTML="<p style='color: black'>Please enter your name: </p>";
+//
+//
+//        $("#loginBtn").click(function () {
+//            name = $("#name")[0].value;
+//
+//            window.localStorage.setItem('names',name);
+            socket.emit('connectToRoom',name);
+//            console.log(name);
+//            socket.emit('userName',name);
+
+
+
+
+    }
+    //连接成功后，隐藏提示
+    socket.on('success', function (data) {
+        document.getElementById('user').style.display='none';
+        document.getElementById('name').style.display='none';
+        document.getElementById('loginBtn').style.display='none';
+        document.getElementsByClassName('loginWrapper')[0].style.display='none';
+        name=data;
+    });
+
+    function pickNumber(arg) {
+        var pickNum = Math.floor(Math.random()*arg.length);
+        return pickNum;
+    }
+
+    socket.on('usersInRoom', function (data) {
+        var notification = data + " has joined";
+        var $roomInfo = $("<div class='roomInfo'</div>");
+
+        $roomInfo.html(notification);
+        $("#show").append($roomInfo);
+//        usersArray=data;
+//        if (usersArray.length >1){
+//            do {
+//                index = pickNumber(usersArray);
+//
+//
+//            }while (usersArray.indexOf(name) == index);
+//
+//        }
+//        else
+//            console.log("Please wait for more people");
+//
+//        console.log(usersArray);
+//        $("#otherName")[0].innerHTML=usersArray[index];
+
+//        socket.emit('remove',{
+//            users:usersArray,
+//            name:name
+//        });
+
+        console.log(usersArray);
+    });
+    socket.on('displayChatter', function (data) {
+        index = data.chatters.indexOf(data.chatter);
+
+        $("#otherName")[0].innerHTML=data.chatters[1-index];
+
+//        socket.emit('remove',{
+//            users:usersArray,
+//            name:name
+//        });
+
+
+    });
+    //判断socket状态
+    socket.on('news', function (data) {
+        console.log(data);
+    });
+    function post(data) {
+
+        if (data.message.toString().length <= 0) {
+//            console.log($("#input")[0].innerHTML.toString());
+            console.log("发送内容不能为空");
+        }
+
+
+        else {
+            var text = data.message;
+            var img = document.createElement("img");
+            img.setAttribute("id", "image");
+            img.setAttribute("src", "/content/捕获.PNG");
+            var $wrap = $("<div class='wrap'</div>");
+            var $father = $("<div class='father'></div>");
+            var $create = $("<div class='bubble'></div>");
+            $wrap.append(img);
+            $father.append($create);
+
+            var $parent = $("#show");
+
+            $parent.append($father);
+            $create.css("width", text.length * 5 + "px");
+
+            $create.html(text);
+            $create.prepend($wrap);
+
+            $("#bubble").text = $("#show").text;
+            $(".bubble").removeAttr("style");
+            $("#input").empty();
+        }
+
+    }
+
+    function postOthers(data) {
+        if (data.message.toString().length <= 0) {
+            console.log("发送内容不能为空");
+        }
+        else{
+            var text2 = data.message;
+            var img2 = document.createElement("img");
+            img2.setAttribute("id", "image2");
+            img2.setAttribute("src", "/content/捕获.PNG");
+            var $wrap2 = $("<div class='wrap2'</div>");
+            var $father2 = $("<div class='father2'></div>");
+            var $create2 = $("<div class='bubble2'></div>");
+            $wrap2.prepend(img2);
+            $father2.append($wrap2);
+
+            var $parent = $("#show");
+
+            $parent.append($father2);
+            $create2.css("width", text2.length * 5 + "px");
+
+            $create2.html(text2);
+            $wrap2.append($create2);
+
+            $("#bubble2").text = $("#show").text;
+            $(".bubble2").removeAttr("style");
+            $("#input").empty();
+        }
+    }
+
+    $("#btn").click(function  () {
+        var msgArray = new Array();
+        msg = $("#input")[0].innerHTML;
+        const data=JSON.parse(localStorage.getItem('chatContent'));
+        if (data != null && msg != null){
+            msgArray.push(data);
+        }
+
+        msgArray.push(msg);
+        window.localStorage.setItem('chatContent',JSON.stringify(msgArray));
+
+        socket.emit('sendChat',msg);
+
+    });
+
+    socket.on('nameExisted',function () {
+        alert("Name has already existed. Please enter again")
+    });
+
+    socket.on('post', function(data) {
+        post(data);
+    });
+    socket.on('postOthers',function (data) {
+        postOthers(data);
+    });
+
+
+    socket.on('joinRoom',function (data) {
+        console.log(data);
+    });
+
+
+
+
+    $("#input").keydown(function (event) {
+        if (event.keyCode == "13") {
+            event.preventDefault();
+            document.getElementById("btn").click();
+
+
+        }
+    });
+
+
+
+
+
+    window.onbeforeunload= function () {
+        return window.localStorage.clear();
+    };
+
+
+    $("#name").keydown(function () {
+        if (event.keyCode == "13") {
+            //event.preventDefault();
+            document.getElementById("loginBtn").click();
+
+
+        }
+    });
+
+    $(window).unload(function(){
+        socket.emit('remove',name);
+    });
+
+</script>
+</html>
