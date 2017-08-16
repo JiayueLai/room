@@ -94,7 +94,7 @@ console.log("room");
 //            name = $("#name")[0].value;
 //
 //            window.localStorage.setItem('names',name);
-            socket.emit('connectToRoom',name);
+            //socket.emit('connectToRoom',name);
 //            console.log(name);
 //            socket.emit('userName',name);
 
@@ -103,13 +103,14 @@ console.log("room");
 
     }
     //连接成功后，隐藏提示
-    socket.on('success', function (data) {
-        document.getElementById('user').style.display='none';
-        document.getElementById('name').style.display='none';
-        document.getElementById('loginBtn').style.display='none';
-        document.getElementsByClassName('loginWrapper')[0].style.display='none';
-        name=data;
-    });
+//    socket.on('success', function (data) {
+////        document.getElementById('user').style.display='none';
+////        document.getElementById('name').style.display='none';
+////        document.getElementById('loginBtn').style.display='none';
+////        document.getElementsByClassName('loginWrapper')[0].style.display='none';
+//        name=data;
+//        console.log("success");
+//    });
 
     function pickNumber(arg) {
         var pickNum = Math.floor(Math.random()*arg.length);
@@ -119,7 +120,7 @@ console.log("room");
     socket.on('usersInRoom', function (data) {
         var notification = data + " has joined";
         var $roomInfo = $("<div class='roomInfo'</div>");
-
+        console.log(data);
         $roomInfo.html(notification);
         $("#show").append($roomInfo);
 //        usersArray=data;

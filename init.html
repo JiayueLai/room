@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <link href="/style/dialogue.css" type="text/css" rel="stylesheet">
 
     <meta charset="UTF-8">
@@ -135,6 +135,17 @@ console.log(data);
             $(".chatters").append($userWrapper);
             $userWrapper.append($userName);
             $userWrapper.append(portrait);
+//            $(document).ready(function () {
+            $(document).off("click").on("click", ".user", function () {
+                var receiver = $(".user")[0].innerHTML.toString();
+                console.log(receiver);
+                socket.emit('connectToRoom', {
+                    name: name,
+                    receiver: receiver
+                });
+                //$userName[0].setAttribute("href","/room/room.html");
+            });
+//            });
         }
 
     });
@@ -152,7 +163,17 @@ console.log(data);
         $(".chatters").append($userWrapper);
         $userWrapper.append($userName);
         $userWrapper.append(portrait);
+//        $(document).ready(function () {
+            $(document).off("click").on("click", ".user", function () {
+                var receiver = $(".user")[0].innerHTML.toString();
+                console.log(receiver);
+                socket.emit('connectToRoom', {
+                    name: name,
+                    receiver: receiver
+                });
 
+            });
+//        });
     });
     //判断socket状态
     socket.on('news', function (data) {
@@ -231,6 +252,30 @@ console.log(data);
             $("#input").empty();
         }
     }
+//    $(".user").click(function () {
+//        var receiver = $(".user")[0].innerHTML.toString();
+//        console.log(receiver);
+//        socket.on('connectToRoom',{
+//            name:name,
+//            receiver:receiver
+//        });
+//    });
+//    $(".user").append($("a").click(function(){
+//        var receiver = $(".user")[0].innerHTML.toString();
+//        console.log(receiver);
+//        socket.on('connectToRoom',{
+//            name:name,
+//            receiver:receiver
+//        });
+//    }));
+//    function jumpIn() {
+//        var receiver = $(".user")[0].innerHTML.toString();
+//        console.log(receiver);
+//        socket.on('connectToRoom',{
+//            name:name,
+//            receiver:receiver
+//        });
+//    }
 
     $("#btn").click(function  () {
         var msgArray = new Array();
